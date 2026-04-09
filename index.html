@@ -6,186 +6,253 @@
 <title>Nuevo Sistemas – Gestão de Implantações</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#F4F2EE;--surface:#FFF;--surface2:#EDEAE4;--border:#D8D4CC;--border2:#C8C3B8;
-    --text:#1A1816;--text2:#6B6660;--text3:#9E9890;
-    --blue:#1B4FBF;--blue-bg:#EBF0FB;--blue-text:#1B3A8A;
-    --green:#1A6B3C;--green-bg:#E6F4EC;--green-text:#145530;
-    --amber:#8A5500;--amber-bg:#FFF3DC;--amber-text:#6B4000;
-    --red:#B22222;--red-bg:#FDEAEA;--red-text:#8B1A1A;
-    --gray-bg:#EDEAE4;--gray-text:#5A5550;
-    --radius:10px;--radius-sm:6px;
-    --shadow:0 1px 3px rgba(0,0,0,.08),0 0 0 1px rgba(0,0,0,.05);
-    --shadow-lg:0 4px 12px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.06);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
+:root{
+  --bg:#F4F2EE;--surface:#FFF;--surface2:#EDEAE4;--border:#D8D4CC;--border2:#C8C3B8;
+  --text:#1A1816;--text2:#6B6660;--text3:#9E9890;
+  --blue:#1B4FBF;--blue-bg:#EBF0FB;--blue-text:#1B3A8A;
+  --green:#1A6B3C;--green-bg:#E6F4EC;--green-text:#145530;
+  --amber:#8A5500;--amber-bg:#FFF3DC;--amber-text:#6B4000;
+  --red:#B22222;--red-bg:#FDEAEA;--red-text:#8B1A1A;
+  --purple:#4C1D95;--purple-bg:#EDE9FE;--purple-text:#3B0764;
+  --gray-bg:#EDEAE4;--gray-text:#5A5550;
+  --radius:10px;--radius-sm:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 0 0 1px rgba(0,0,0,.05);
+  --shadow-lg:0 4px 16px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
 
-  /* LOADING */
-  #loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px}
-  .logo-big{width:56px;height:56px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:#fff}
-  .spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  #loading-screen p{font-size:13px;color:var(--text2)}
+/* OVERLAYS */
+.overlay{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px}
+.overlay.hidden{display:none}
+.logo-big{width:56px;height:56px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:#fff}
+.spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.overlay p{font-size:13px;color:var(--text2)}
 
-  /* SETUP */
-  #setup-screen{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;z-index:9998;padding:20px}
-  .setup-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:520px;width:100%;box-shadow:var(--shadow-lg)}
-  .setup-logo{width:44px;height:44px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#fff;margin-bottom:16px}
-  .setup-title{font-size:18px;font-weight:600;margin-bottom:6px}
-  .setup-sub{font-size:13px;color:var(--text2);margin-bottom:22px;line-height:1.6}
-  .setup-step{display:flex;gap:10px;margin-bottom:10px;padding:11px 12px;background:var(--bg);border-radius:var(--radius-sm)}
-  .step-num{width:22px;height:22px;background:var(--blue);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
-  .step-text{font-size:12px;color:var(--text);line-height:1.6}
-  .step-text a{color:var(--blue);text-decoration:none}
-  .setup-field{margin-top:18px}
-  .setup-field label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:6px}
-  .setup-field input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;outline:none}
-  .setup-field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,79,191,.1)}
-  .setup-err{font-size:12px;color:var(--red);margin-top:6px;display:none}
+/* SETUP / LOGIN CARD */
+.centered-card{position:fixed;inset:0;background:rgba(244,242,238,.95);display:flex;align-items:center;justify-content:center;z-index:9998;padding:20px}
+.centered-card.hidden{display:none}
+.modal-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:480px;width:100%;box-shadow:var(--shadow-lg)}
+.modal-logo{width:44px;height:44px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#fff;margin-bottom:16px}
+.modal-title{font-size:18px;font-weight:600;margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:22px;line-height:1.6}
+.setup-step{display:flex;gap:10px;margin-bottom:10px;padding:11px 12px;background:var(--bg);border-radius:var(--radius-sm)}
+.step-num{width:22px;height:22px;background:var(--blue);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.step-text{font-size:12px;color:var(--text);line-height:1.6}
+.step-text a{color:var(--blue);text-decoration:none}
+.field{margin-bottom:14px}
+.field label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px}
+.field input,.field select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;outline:none}
+.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,79,191,.1)}
+.field-err{font-size:12px;color:var(--red);margin-top:5px;display:none}
 
-  /* LAYOUT */
-  .layout{display:flex;min-height:100vh}
-  .sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;height:100vh;z-index:100}
-  .sidebar-brand{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
-  .brand-logo{width:36px;height:36px;background:var(--blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;color:#fff;margin-bottom:10px}
-  .brand-name{font-size:13px;font-weight:600}
-  .brand-sub{font-size:11px;color:var(--text3);margin-top:1px}
-  .sidebar-nav{padding:12px 10px;flex:1}
-  .nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
-  .nav-item:hover{background:var(--surface2);color:var(--text)}
-  .nav-item.active{background:var(--blue-bg);color:var(--blue-text);font-weight:500}
-  .nav-icon{font-size:15px;width:20px;text-align:center}
-  .nav-badge{margin-left:auto;background:var(--red-bg);color:var(--red-text);font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px}
-  .sync-row{display:flex;align-items:center;gap:6px;margin-bottom:4px}
-  .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-  .sync-dot.off{background:var(--text3);animation:none}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-  .sidebar-footer{padding:14px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
-  .main{margin-left:220px;padding:28px 32px;flex:1}
-  .page{display:none}.page.active{display:block}
-  .page-header{margin-bottom:24px}
-  .page-title{font-size:22px;font-weight:600}
-  .page-sub{font-size:13px;color:var(--text2);margin-top:3px}
+/* LAYOUT */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;height:100vh;z-index:100}
+.sidebar-brand{padding:20px 18px 14px;border-bottom:1px solid var(--border)}
+.brand-logo{width:34px;height:34px;background:var(--blue);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;margin-bottom:9px}
+.brand-name{font-size:13px;font-weight:600}
+.brand-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.sidebar-user{padding:10px 18px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px}
+.user-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.user-avatar.admin{background:var(--purple-bg);color:var(--purple-text)}
+.user-avatar.tecnico{background:var(--blue-bg);color:var(--blue-text)}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:10px;color:var(--text3)}
+.btn-logout{padding:4px 8px;border:none;background:none;cursor:pointer;font-size:11px;color:var(--text3);font-family:'DM Sans',sans-serif;border-radius:4px}
+.btn-logout:hover{color:var(--red);background:var(--red-bg)}
+.sidebar-nav{padding:10px 10px;flex:1;overflow-y:auto}
+.nav-group{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:8px 10px 4px;margin-top:4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--blue-bg);color:var(--blue-text);font-weight:500}
+.nav-item.admin-only{display:none}
+.nav-icon{font-size:14px;width:18px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--red-bg);color:var(--red-text);font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px}
+.sync-row{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.sync-dot.off{background:var(--text3);animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sidebar-footer{padding:12px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
+.main{margin-left:230px;padding:28px 32px;flex:1;min-width:0}
+.page{display:none}.page.active{display:block}
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.page-title{font-size:22px;font-weight:600}
+.page-sub{font-size:13px;color:var(--text2);margin-top:3px}
 
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;box-shadow:var(--shadow)}
-  .card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
-  .card-title{font-size:14px;font-weight:600}
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;box-shadow:var(--shadow)}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:600}
+.card-sub{font-size:12px;color:var(--text2);margin-top:2px}
 
-  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
-  .stat-num{font-size:28px;font-weight:600;font-family:'DM Mono',monospace}
-  .stat-label{font-size:11px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
-  .stat-num.blue{color:var(--blue)}.stat-num.green{color:var(--green)}.stat-num.red{color:var(--red)}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.stat-num{font-size:26px;font-weight:600;font-family:'DM Mono',monospace}
+.stat-label{font-size:10px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+.stat-num.blue{color:var(--blue)}.stat-num.green{color:var(--green)}.stat-num.red{color:var(--red)}.stat-num.amber{color:var(--amber)}
 
-  .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:3px 8px;border-radius:20px}
-  .badge-blue{background:var(--blue-bg);color:var(--blue-text)}
-  .badge-green{background:var(--green-bg);color:var(--green-text)}
-  .badge-amber{background:var(--amber-bg);color:var(--amber-text)}
-  .badge-red{background:var(--red-bg);color:var(--red-text)}
-  .badge-gray{background:var(--gray-bg);color:var(--gray-text)}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:3px 8px;border-radius:20px}
+.badge-blue{background:var(--blue-bg);color:var(--blue-text)}
+.badge-green{background:var(--green-bg);color:var(--green-text)}
+.badge-amber{background:var(--amber-bg);color:var(--amber-text)}
+.badge-red{background:var(--red-bg);color:var(--red-text)}
+.badge-gray{background:var(--gray-bg);color:var(--gray-text)}
+.badge-purple{background:var(--purple-bg);color:var(--purple-text)}
 
-  .progress-bar{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-top:10px}
-  .progress-fill{height:100%;background:var(--blue);border-radius:3px;transition:width .4s ease}
-  .progress-text{font-size:11px;color:var(--text3);margin-top:5px;font-family:'DM Mono',monospace}
+/* PROGRESS */
+.progress-bar{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-top:10px}
+.progress-fill{height:100%;background:var(--blue);border-radius:3px;transition:width .4s ease}
+.progress-text{font-size:11px;color:var(--text3);margin-top:5px;font-family:'DM Mono',monospace}
 
-  .impl-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:10px;box-shadow:var(--shadow);transition:box-shadow .2s}
-  .impl-card:hover{box-shadow:var(--shadow-lg)}
-  .impl-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-  .impl-name{font-size:15px;font-weight:600}
-  .impl-meta{font-size:12px;color:var(--text2);margin-top:3px}
-  .impl-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+/* IMPL CARDS */
+.impl-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:10px;box-shadow:var(--shadow);transition:box-shadow .2s}
+.impl-card:hover{box-shadow:var(--shadow-lg)}
+.impl-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.impl-name{font-size:14px;font-weight:600}
+.impl-meta{font-size:12px;color:var(--text2);margin-top:3px}
+.impl-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
 
-  .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
-  .btn:hover{background:var(--surface2)}
-  .btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
-  .btn-primary:hover{background:#1640A0}
-  .btn-danger{background:var(--red-bg);color:var(--red-text);border-color:#f5b5b5}
-  .btn-danger:hover{background:#fad0d0}
-  .btn-sm{padding:5px 10px;font-size:11px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--surface2)}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-primary:hover{background:#1640A0}
+.btn-danger{background:var(--red-bg);color:var(--red-text);border-color:#f5b5b5}
+.btn-danger:hover{background:#fad0d0}
+.btn-sm{padding:5px 10px;font-size:11px}
 
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-  .form-grid.full{grid-template-columns:1fr}
-  label{font-size:11px;font-weight:500;color:var(--text2);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
-  input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color .15s;outline:none}
-  input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,79,191,.1)}
-  textarea{resize:vertical;min-height:80px}
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-grid.full{grid-template-columns:1fr}
+.form-grid.three{grid-template-columns:1fr 1fr 1fr}
+label{font-size:11px;font-weight:500;color:var(--text2);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color .15s;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,79,191,.1)}
+textarea{resize:vertical;min-height:72px}
 
-  .check-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;border-radius:4px}
-  .check-item:last-child{border-bottom:none}
-  .check-item:hover{background:var(--surface2);margin:0 -8px;padding:10px 8px}
-  .check-box{width:18px;height:18px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s}
-  .check-box.checked{background:var(--blue);border-color:var(--blue)}
-  .check-tick{color:#fff;font-size:10px;font-weight:700}
-  .check-label{font-size:13px;line-height:1.5}
-  .check-label.done{text-decoration:line-through;color:var(--text3)}
-  .check-obs{font-size:11px;color:var(--text3);margin-top:2px;font-style:italic}
-  .phase-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid var(--surface2)}
-  .phase-name{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+/* CHECKLIST */
+.check-item{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;border-radius:4px}
+.check-item:last-child{border-bottom:none}
+.check-item:hover{background:var(--surface2);margin:0 -8px;padding:9px 8px}
+.check-box{width:17px;height:17px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.check-box.checked{background:var(--blue);border-color:var(--blue)}
+.check-tick{color:#fff;font-size:10px;font-weight:700}
+.check-label{font-size:13px;line-height:1.5}
+.check-label.done{text-decoration:line-through;color:var(--text3)}
+.check-obs{font-size:11px;color:var(--text3);margin-top:1px;font-style:italic}
+.phase-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid var(--surface2)}
+.phase-name{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
 
-  .pend-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow)}
-  .pend-item.alta{border-left:3px solid var(--red)}
-  .pend-item.media{border-left:3px solid var(--amber)}
-  .pend-item.baixa{border-left:3px solid var(--border2)}
-  .pend-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-  .pend-title{font-size:13px;font-weight:600}
-  .pend-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:5px}
-  .pend-desc{font-size:12px;color:var(--text2);margin-top:7px;line-height:1.6;padding-top:7px;border-top:1px solid var(--border)}
-  .pend-actions{display:flex;gap:6px;flex-shrink:0}
+/* PENDÊNCIAS */
+.pend-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin-bottom:8px;box-shadow:var(--shadow)}
+.pend-item.alta{border-left:3px solid var(--red)}
+.pend-item.media{border-left:3px solid var(--amber)}
+.pend-item.baixa{border-left:3px solid var(--border2)}
+.pend-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.pend-title{font-size:13px;font-weight:600}
+.pend-meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:5px}
+.pend-desc{font-size:12px;color:var(--text2);margin-top:6px;line-height:1.6;padding-top:6px;border-top:1px solid var(--border)}
+.pend-actions{display:flex;gap:5px;flex-shrink:0}
+.filter-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.filter-btn{padding:5px 13px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:var(--surface);cursor:pointer;color:var(--text2);font-family:'DM Sans',sans-serif;transition:all .15s}
+.filter-btn:hover{background:var(--surface2)}
+.filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 
-  .filter-row{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-  .filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:var(--surface);cursor:pointer;color:var(--text2);font-family:'DM Sans',sans-serif;transition:all .15s}
-  .filter-btn:hover{background:var(--surface2)}
-  .filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+/* RELATÓRIOS */
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.report-section{margin-bottom:20px}
+.report-section-title{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.report-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.report-row:last-child{border-bottom:none}
+.report-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500}
+.chart-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.chart-bar-label{font-size:12px;color:var(--text2);width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chart-bar-track{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.chart-bar-fill{height:100%;border-radius:4px;background:var(--blue);transition:width .5s ease}
+.chart-bar-fill.green{background:var(--green)}
+.chart-bar-fill.amber{background:var(--amber)}
+.chart-bar-fill.red{background:var(--red)}
+.chart-bar-num{font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);min-width:28px;text-align:right}
+.alert-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--red-bg);border:1px solid #f5c0c0;border-radius:var(--radius-sm);margin-bottom:7px;font-size:12px}
+.alert-item.warn{background:var(--amber-bg);border-color:#f5d88a}
+.alert-icon{font-size:14px;flex-shrink:0;margin-top:1px}
 
-  .actions-row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
-  select.inline{padding:5px 8px;font-size:11px;height:auto;border-radius:var(--radius-sm)}
-  .empty{text-align:center;padding:40px 20px;color:var(--text3)}
-  .empty-icon{font-size:32px;margin-bottom:10px}
-  .empty-text{font-size:13px}
+/* USUÁRIOS */
+.user-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}
+.user-card-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.user-card-info{flex:1}
+.user-card-name{font-size:13px;font-weight:600}
+.user-card-meta{font-size:12px;color:var(--text2);margin-top:2px}
+.user-card-actions{display:flex;gap:6px}
 
-  .notif{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;padding:10px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;z-index:9997}
-  .notif.show{opacity:1;transform:translateY(0)}
+/* MISC */
+.actions-row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+select.inline{padding:5px 8px;font-size:11px;height:auto;border-radius:var(--radius-sm)}
+.empty{text-align:center;padding:36px 20px;color:var(--text3)}
+.empty-icon{font-size:28px;margin-bottom:8px}
+.empty-text{font-size:13px}
+.notif{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;padding:10px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;z-index:99999}
+.notif.show{opacity:1;transform:translateY(0)}
+.divider{height:1px;background:var(--border);margin:14px 0}
 
-  @media(max-width:768px){
-    .sidebar{width:100%;height:auto;position:relative}
-    .sidebar-nav{display:flex;flex-direction:row;overflow-x:auto;padding:8px}
-    .sidebar-footer{display:none}
-    .main{margin-left:0;padding:16px}
-    .stats-grid{grid-template-columns:repeat(2,1fr)}
-    .form-grid{grid-template-columns:1fr}
-    .layout{flex-direction:column}
-  }
+@media(max-width:768px){
+  .sidebar{width:100%;height:auto;position:relative}
+  .sidebar-nav{display:flex;flex-direction:row;overflow-x:auto;padding:6px}
+  .sidebar-footer,.nav-group{display:none}
+  .main{margin-left:0;padding:14px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .form-grid,.report-grid{grid-template-columns:1fr}
+  .layout{flex-direction:column}
+}
 </style>
 </head>
 <body>
 
-<div id="loading-screen">
+<!-- LOADING -->
+<div id="loading-screen" class="overlay">
   <div class="logo-big">NS</div>
   <div class="spinner"></div>
-  <p id="loading-msg">Conectando ao banco de dados...</p>
+  <p id="loading-msg">Conectando...</p>
 </div>
 
-<div id="setup-screen">
-  <div class="setup-card">
-    <div class="setup-logo">NS</div>
-    <div class="setup-title">Configurar banco de dados compartilhado</div>
-    <div class="setup-sub">Siga os 4 passos abaixo para conectar o Firebase gratuitamente. Feito uma vez, todos os colaboradores compartilharão os mesmos dados em tempo real.</div>
-    <div class="setup-step"><div class="step-num">1</div><div class="step-text">Acesse <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a>, clique em <strong>"Criar projeto"</strong>, escolha um nome (ex: <strong>nuevo-implantacoes</strong>) e desative o Google Analytics.</div></div>
-    <div class="setup-step"><div class="step-num">2</div><div class="step-text">No menu lateral do projeto, clique em <strong>"Realtime Database"</strong> → <strong>"Criar banco de dados"</strong> → região <strong>us-central1</strong> → <strong>"Modo de teste"</strong> → <strong>Ativar</strong>.</div></div>
-    <div class="setup-step"><div class="step-num">3</div><div class="step-text">Copie a URL que aparece no topo do banco, no formato:<br><strong>https://nuevo-implantacoes-default-rtdb.firebaseio.com</strong></div></div>
-    <div class="setup-step"><div class="step-num">4</div><div class="step-text">Cole a URL abaixo e clique em <strong>Conectar</strong>. Esta configuração é salva automaticamente.</div></div>
-    <div class="setup-field">
+<!-- FIREBASE SETUP -->
+<div id="setup-screen" class="centered-card hidden">
+  <div class="modal-card">
+    <div class="modal-logo">NS</div>
+    <div class="modal-title">Configurar banco de dados</div>
+    <div class="modal-sub">Configure o Firebase para sincronizar dados entre todos os colaboradores.</div>
+    <div class="setup-step"><div class="step-num">1</div><div class="step-text">Acesse <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> → <strong>Criar projeto</strong> → nome: <strong>nuevo-implantacoes</strong> → desative Analytics.</div></div>
+    <div class="setup-step"><div class="step-num">2</div><div class="step-text"><strong>Realtime Database</strong> → <strong>Criar banco de dados</strong> → região <strong>us-central1</strong> → <strong>Modo de teste</strong> → Ativar.</div></div>
+    <div class="setup-step"><div class="step-num">3</div><div class="step-text">Copie a URL do banco: <strong>https://seu-projeto-default-rtdb.firebaseio.com</strong></div></div>
+    <div class="field" style="margin-top:18px">
       <label>URL do Realtime Database</label>
       <input type="text" id="firebase-url-input" placeholder="https://seu-projeto-default-rtdb.firebaseio.com">
-      <div class="setup-err" id="setup-err">URL inválida. Use o formato: https://PROJETO-default-rtdb.firebaseio.com</div>
+      <div class="field-err" id="setup-err">URL inválida. Use o formato correto.</div>
     </div>
-    <div class="actions-row" style="padding-top:16px;margin-top:8px;border-top:1px solid var(--border)">
-      <button class="btn btn-primary" onclick="conectarFirebase()">Conectar e entrar →</button>
-    </div>
+    <div class="actions-row"><button class="btn btn-primary" onclick="conectarFirebase()">Conectar →</button></div>
   </div>
 </div>
 
+<!-- LOGIN -->
+<div id="login-screen" class="centered-card hidden">
+  <div class="modal-card" style="max-width:380px">
+    <div class="modal-logo">NS</div>
+    <div class="modal-title">Entrar no sistema</div>
+    <div class="modal-sub">Nuevo Sistemas · Gestão de Implantações</div>
+    <div class="field"><label>Usuário</label><input type="text" id="login-user" placeholder="Seu nome de usuário" autocomplete="username"></div>
+    <div class="field"><label>Senha</label><input type="password" id="login-pass" placeholder="Sua senha" autocomplete="current-password" onkeydown="if(event.key==='Enter')fazerLogin()"></div>
+    <div class="field-err" id="login-err" style="display:none;margin-top:-8px;margin-bottom:8px">Usuário ou senha incorretos.</div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px" onclick="fazerLogin()">Entrar</button>
+    <div style="font-size:11px;color:var(--text3);margin-top:14px;text-align:center">Primeiro acesso? Peça ao administrador para criar seu usuário.</div>
+  </div>
+</div>
+
+<!-- APP -->
 <div class="layout" id="app" style="display:none">
   <aside class="sidebar">
     <div class="sidebar-brand">
@@ -193,45 +260,63 @@
       <div class="brand-name">Nuevo Sistemas</div>
       <div class="brand-sub">Gestão de Implantações</div>
     </div>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebar-avatar">?</div>
+      <div class="user-info">
+        <div class="user-name" id="sidebar-name">—</div>
+        <div class="user-role" id="sidebar-role">—</div>
+      </div>
+      <button class="btn-logout" onclick="fazerLogout()" title="Sair">↩</button>
+    </div>
     <nav class="sidebar-nav">
+      <div class="nav-group">Geral</div>
       <button class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">◼</span> Painel</button>
       <button class="nav-item" onclick="showPage('checklist')"><span class="nav-icon">✓</span> Checklist</button>
       <button class="nav-item" onclick="showPage('pendencias')">
         <span class="nav-icon">⚑</span> Pendências
         <span class="nav-badge" id="badge-pend" style="display:none">0</span>
       </button>
-      <button class="nav-item" onclick="showPage('nova')"><span class="nav-icon">+</span> Nova Implantação</button>
+      <button class="nav-item" onclick="showPage('relatorios')"><span class="nav-icon">▦</span> Relatórios</button>
+      <div class="nav-group admin-only">Administração</div>
+      <button class="nav-item admin-only" onclick="showPage('nova')"><span class="nav-icon">+</span> Nova Implantação</button>
+      <button class="nav-item admin-only" onclick="showPage('usuarios')"><span class="nav-icon">👥</span> Usuários</button>
     </nav>
     <div class="sidebar-footer">
       <div class="sync-row"><div class="sync-dot" id="sync-dot"></div><span id="sync-label">Sincronizado</span></div>
-      São José do Egito – PE · v2.0
+      São José do Egito – PE · v3.0
     </div>
   </aside>
 
   <main class="main">
+
+    <!-- PAINEL -->
     <div id="page-dashboard" class="page active">
-      <div class="page-header"><div class="page-title">Painel de Controle</div><div class="page-sub">Visão geral em tempo real de todas as implantações</div></div>
+      <div class="page-header">
+        <div><div class="page-title">Painel de Controle</div><div class="page-sub" id="dash-sub">Visão geral em tempo real</div></div>
+      </div>
       <div class="stats-grid" id="stats-grid"></div>
       <div id="dashboard-list"></div>
     </div>
 
+    <!-- CHECKLIST -->
     <div id="page-checklist" class="page">
-      <div class="page-header"><div class="page-title">Checklist de Implantação</div><div class="page-sub">Acompanhe e registre o progresso por etapas</div></div>
+      <div class="page-header"><div><div class="page-title">Checklist</div><div class="page-sub">Acompanhe o progresso por etapas</div></div></div>
       <div class="card">
         <div class="form-grid">
-          <div><label>Selecionar implantação</label><select id="sel-implant" onchange="renderChecklist()"></select></div>
+          <div><label>Implantação</label><select id="sel-implant" onchange="renderChecklist()"></select></div>
           <div><label>Progresso geral</label>
             <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
-            <div class="progress-text" id="prog-text">— itens concluídos</div>
+            <div class="progress-text" id="prog-text">—</div>
           </div>
         </div>
       </div>
       <div id="checklist-body"></div>
     </div>
 
+    <!-- PENDÊNCIAS -->
     <div id="page-pendencias" class="page">
-      <div class="page-header"><div class="page-title">Pendências</div><div class="page-sub">Registro e acompanhamento de itens em aberto</div></div>
-      <div class="card">
+      <div class="page-header"><div><div class="page-title">Pendências</div><div class="page-sub">Registro e acompanhamento de itens em aberto</div></div></div>
+      <div class="card" id="pend-form-card">
         <div class="card-header"><div class="card-title">Registrar nova pendência</div></div>
         <div class="form-grid">
           <div><label>Implantação</label><select id="pend-impl"></select></div>
@@ -239,11 +324,11 @@
         </div>
         <div class="form-grid">
           <div><label>Título</label><input type="text" id="pend-titulo" placeholder="Ex: Impressora fiscal não configurada"></div>
-          <div><label>Responsável</label><input type="text" id="pend-resp" placeholder="Nome do colaborador"></div>
+          <div><label>Responsável</label><input type="text" id="pend-resp" placeholder="Nome do técnico"></div>
         </div>
         <div class="form-grid">
           <div><label>Prazo</label><input type="date" id="pend-prazo"></div>
-          <div><label>Descrição</label><input type="text" id="pend-desc" placeholder="Descreva o problema"></div>
+          <div><label>Descrição</label><input type="text" id="pend-desc" placeholder="Detalhes da pendência"></div>
         </div>
         <div class="actions-row"><button class="btn btn-primary" onclick="addPendencia()">Registrar pendência</button></div>
       </div>
@@ -252,20 +337,29 @@
         <button class="filter-btn" onclick="filterPend('aberta',this)">Abertas</button>
         <button class="filter-btn" onclick="filterPend('em_andamento',this)">Em andamento</button>
         <button class="filter-btn" onclick="filterPend('resolvida',this)">Resolvidas</button>
-        <button class="filter-btn" onclick="filterPend('alta',this)">Prioridade alta</button>
+        <button class="filter-btn" onclick="filterPend('alta',this)">Alta prioridade</button>
       </div>
       <div id="pend-list"></div>
     </div>
 
+    <!-- RELATÓRIOS -->
+    <div id="page-relatorios" class="page">
+      <div class="page-header"><div><div class="page-title">Relatórios</div><div class="page-sub">Análise de desempenho e pendências</div></div>
+        <button class="btn" onclick="renderRelatorios()">↻ Atualizar</button>
+      </div>
+      <div id="relatorios-body"></div>
+    </div>
+
+    <!-- NOVA IMPLANTAÇÃO (admin) -->
     <div id="page-nova" class="page">
-      <div class="page-header"><div class="page-title">Nova Implantação</div><div class="page-sub">Cadastre um novo cliente e gere o checklist automaticamente</div></div>
+      <div class="page-header"><div><div class="page-title">Nova Implantação</div><div class="page-sub">Cadastre um novo cliente</div></div></div>
       <div class="card">
         <div class="form-grid">
           <div><label>Nome do cliente *</label><input type="text" id="n-cliente" placeholder="Razão social ou nome fantasia"></div>
           <div><label>Cidade / Estado</label><input type="text" id="n-cidade" placeholder="Ex: Recife – PE"></div>
         </div>
         <div class="form-grid">
-          <div><label>Produto contratado *</label>
+          <div><label>Produto *</label>
             <select id="n-produto">
               <option value="erp">ERP – Gestão Empresarial</option>
               <option value="ponto">Ponto Eletrônico</option>
@@ -274,164 +368,197 @@
               <option value="restaurante">Restaurante</option>
             </select>
           </div>
-          <div><label>Consultor responsável *</label><input type="text" id="n-consultor" placeholder="Nome do consultor"></div>
+          <div><label>Técnico responsável *</label><select id="n-consultor"></select></div>
         </div>
         <div class="form-grid">
           <div><label>Data de início prevista</label><input type="date" id="n-data"></div>
           <div><label>Contato do cliente</label><input type="text" id="n-contato" placeholder="Telefone ou e-mail"></div>
         </div>
-        <div class="form-grid full"><div><label>Observações iniciais</label><textarea id="n-obs" placeholder="Particularidades, informações relevantes..."></textarea></div></div>
+        <div class="form-grid full"><div><label>Observações</label><textarea id="n-obs" placeholder="Particularidades ou informações relevantes..."></textarea></div></div>
         <div class="actions-row"><button class="btn btn-primary" onclick="criarImpl()">Criar implantação →</button></div>
       </div>
     </div>
+
+    <!-- USUÁRIOS (admin) -->
+    <div id="page-usuarios" class="page">
+      <div class="page-header"><div><div class="page-title">Controle de Usuários</div><div class="page-sub">Gerencie administradores e técnicos</div></div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Cadastrar novo usuário</div></div>
+        <div class="form-grid three">
+          <div><label>Nome completo *</label><input type="text" id="u-nome" placeholder="Nome do colaborador"></div>
+          <div><label>Usuário (login) *</label><input type="text" id="u-login" placeholder="sem espaços, ex: joao.silva"></div>
+          <div><label>Senha *</label><input type="password" id="u-senha" placeholder="Mínimo 4 caracteres"></div>
+        </div>
+        <div class="form-grid">
+          <div><label>Perfil *</label>
+            <select id="u-perfil">
+              <option value="tecnico">Técnico</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+          <div><label>E-mail (opcional)</label><input type="text" id="u-email" placeholder="email@empresa.com"></div>
+        </div>
+        <div class="actions-row"><button class="btn btn-primary" onclick="criarUsuario()">Cadastrar usuário</button></div>
+      </div>
+      <div id="lista-usuarios"></div>
+    </div>
+
   </main>
 </div>
 
 <div class="notif" id="notif"></div>
 
 <script>
-const CHECKLISTS = {
+// ================================================================
+// CHECKLISTS
+// ================================================================
+const CHECKLISTS={
   erp:{nome:"ERP – Gestão Empresarial",fases:[
     {fase:"Fase 1 — Pré-implantação",itens:[
-      {id:"e01",txt:"Levantamento de requisitos e mapeamento de processos",obs:"Identificar rotinas atuais, gargalos e necessidades do cliente"},
-      {id:"e02",txt:"Assinatura do contrato e coleta de documentos fiscais",obs:"CNPJ, Inscrição Estadual, Inscrição Municipal, dados de sócios"},
-      {id:"e03",txt:"Definição do cronograma de implantação com o cliente",obs:""},
-      {id:"e04",txt:"Instalação do sistema no servidor / ambiente de nuvem",obs:"Verificar requisitos de hardware e conectividade"},
+      {id:"e01",txt:"Levantamento de requisitos e mapeamento de processos",obs:"Identificar rotinas atuais e necessidades"},
+      {id:"e02",txt:"Assinatura do contrato e coleta de documentos fiscais",obs:"CNPJ, IE, IM, dados de sócios"},
+      {id:"e03",txt:"Definição do cronograma com o cliente",obs:""},
+      {id:"e04",txt:"Instalação do sistema no servidor / nuvem",obs:"Verificar requisitos de hardware"},
       {id:"e05",txt:"Configuração do banco de dados e ambiente de produção",obs:""}
     ]},
     {fase:"Fase 2 — Parametrização fiscal e cadastros",itens:[
-      {id:"e06",txt:"Configuração de CNPJ, regime tributário e CFOP padrão",obs:"Simples Nacional, Lucro Presumido ou Lucro Real"},
-      {id:"e07",txt:"Importação ou cadastro de produtos e serviços",obs:"Código, descrição, NCM, CEST, alíquotas ICMS/PIS/COFINS"},
+      {id:"e06",txt:"Configuração de CNPJ, regime tributário e CFOP",obs:"Simples, Lucro Presumido ou Real"},
+      {id:"e07",txt:"Importação / cadastro de produtos e serviços",obs:"NCM, CEST, alíquotas ICMS/PIS/COFINS"},
       {id:"e08",txt:"Cadastro de fornecedores e clientes base",obs:""},
-      {id:"e09",txt:"Configuração de tabelas de preço, margens e descontos",obs:""},
+      {id:"e09",txt:"Configuração de tabelas de preço e descontos",obs:""},
       {id:"e10",txt:"Configuração de plano de contas e centros de custo",obs:""},
-      {id:"e11",txt:"Configuração de formas de pagamento e portadores",obs:"Dinheiro, cartão, boleto, PIX, cheque"}
+      {id:"e11",txt:"Configuração de formas de pagamento e portadores",obs:"Dinheiro, cartão, boleto, PIX"}
     ]},
     {fase:"Fase 3 — Módulos e treinamento",itens:[
-      {id:"e12",txt:"Treinamento: módulo de vendas e faturamento (NF-e)",obs:"Orçamentos, pedidos, faturamento, PDV"},
-      {id:"e13",txt:"Treinamento: módulo de compras e entrada de NF",obs:"Cotação, pedido de compra, XML"},
-      {id:"e14",txt:"Treinamento: controle de estoque e inventário",obs:"Movimentações, transferências, ajustes"},
-      {id:"e15",txt:"Treinamento: financeiro — contas a pagar e a receber",obs:"Lançamentos, baixas, conciliação bancária"},
-      {id:"e16",txt:"Treinamento: relatórios gerenciais e dashboards",obs:"DRE simplificado, fluxo de caixa, posição de estoque"}
+      {id:"e12",txt:"Treinamento: vendas e faturamento (NF-e)",obs:"Orçamentos, pedidos, PDV"},
+      {id:"e13",txt:"Treinamento: compras e entrada de NF",obs:"Cotação, pedido, XML"},
+      {id:"e14",txt:"Treinamento: estoque e inventário",obs:"Movimentações, ajustes"},
+      {id:"e15",txt:"Treinamento: financeiro (contas a pagar/receber)",obs:"Lançamentos, baixas, conciliação"},
+      {id:"e16",txt:"Treinamento: relatórios gerenciais",obs:"DRE, fluxo de caixa, estoque"}
     ]},
     {fase:"Fase 4 — Configuração fiscal",itens:[
-      {id:"e17",txt:"Instalação e configuração do certificado digital (A1 ou A3)",obs:""},
-      {id:"e18",txt:"Configuração e homologação de NF-e",obs:"Testar emissão, cancelamento e carta de correção"},
-      {id:"e19",txt:"Configuração de NFC-e (consumidor final)",obs:"Se aplicável — verificar convênio ICMS estadual"},
-      {id:"e20",txt:"Configuração de NFS-e municipal (prestador de serviço)",obs:""}
+      {id:"e17",txt:"Instalação do certificado digital (A1 ou A3)",obs:""},
+      {id:"e18",txt:"Configuração e homologação de NF-e",obs:"Emissão, cancelamento, carta de correção"},
+      {id:"e19",txt:"Configuração de NFC-e (consumidor final)",obs:"Se aplicável"},
+      {id:"e20",txt:"Configuração de NFS-e municipal",obs:"Se prestador de serviço"}
     ]},
     {fase:"Fase 5 — Validação e go-live",itens:[
       {id:"e21",txt:"Teste completo: venda → faturamento → financeiro",obs:""},
-      {id:"e22",txt:"Teste de backup automático e restauração",obs:""},
-      {id:"e23",txt:"Criação dos usuários definitivos e perfis de acesso",obs:""},
-      {id:"e24",txt:"Entrega das credenciais de acesso ao cliente",obs:""},
-      {id:"e25",txt:"Assinatura do Termo de Conclusão de Implantação",obs:""},
-      {id:"e26",txt:"Orientação sobre canais de suporte",obs:""}
+      {id:"e22",txt:"Teste de backup e restauração",obs:""},
+      {id:"e23",txt:"Criação de usuários definitivos e perfis de acesso",obs:""},
+      {id:"e24",txt:"Entrega das credenciais ao cliente",obs:""},
+      {id:"e25",txt:"Assinatura do Termo de Conclusão",obs:""},
+      {id:"e26",txt:"Orientação sobre suporte",obs:""}
     ]}
   ]},
   ponto:{nome:"Ponto Eletrônico",fases:[
     {fase:"Fase 1 — Configuração inicial",itens:[
-      {id:"p01",txt:"Coleta de dados da empresa: CNPJ e enquadramento MTE",obs:"Portaria 671"},
+      {id:"p01",txt:"Coleta de dados da empresa e enquadramento MTE",obs:"Portaria 671"},
       {id:"p02",txt:"Instalação do software de gestão de ponto",obs:""},
-      {id:"p03",txt:"Integração com relógio de ponto ou app mobile",obs:"Biometria, facial, QR Code ou PIN"},
-      {id:"p04",txt:"Cadastro dos funcionários, matrículas e admissão",obs:""}
+      {id:"p03",txt:"Integração com relógio / app mobile",obs:"Biometria, facial, QR Code, PIN"},
+      {id:"p04",txt:"Cadastro dos funcionários e matrículas",obs:""}
     ]},
     {fase:"Fase 2 — Jornadas e parametrização",itens:[
-      {id:"p05",txt:"Configuração de turnos e horários de trabalho",obs:"CLT, 12x36, escalas variadas"},
-      {id:"p06",txt:"Configuração de tolerâncias, intervalos e horas extras",obs:""},
-      {id:"p07",txt:"Configuração de banco de horas e compensações",obs:""},
-      {id:"p08",txt:"Cadastro de feriados municipais, estaduais e nacionais",obs:""},
-      {id:"p09",txt:"Configuração de afastamentos, atestados e faltas",obs:""}
+      {id:"p05",txt:"Configuração de turnos e horários",obs:"CLT, 12x36, escalas variadas"},
+      {id:"p06",txt:"Configuração de tolerâncias e horas extras",obs:""},
+      {id:"p07",txt:"Configuração de banco de horas",obs:""},
+      {id:"p08",txt:"Cadastro de feriados",obs:""},
+      {id:"p09",txt:"Configuração de afastamentos e atestados",obs:""}
     ]},
     {fase:"Fase 3 — Testes e encerramento",itens:[
-      {id:"p10",txt:"Teste de registro e geração do espelho de ponto",obs:"Formato AFD/AFDT"},
-      {id:"p11",txt:"Treinamento do RH: gestão de justificativas",obs:""},
-      {id:"p12",txt:"Geração de relatório de fechamento do mês teste",obs:""},
-      {id:"p13",txt:"Entrega de credenciais e treinamento de gestores",obs:""},
+      {id:"p10",txt:"Teste de registro e espelho de ponto",obs:"Formato AFD/AFDT"},
+      {id:"p11",txt:"Treinamento do RH",obs:""},
+      {id:"p12",txt:"Relatório de fechamento do mês teste",obs:""},
+      {id:"p13",txt:"Treinamento de gestores",obs:""},
       {id:"p14",txt:"Assinatura do Termo de Conclusão",obs:""}
     ]}
   ]},
   farmacia:{nome:"Sistema de Farmácia",fases:[
     {fase:"Fase 1 — Habilitações e cadastros",itens:[
-      {id:"f01",txt:"Configuração do CRF e dados SNGPC",obs:"Cadastro obrigatório ANVISA"},
+      {id:"f01",txt:"Configuração do CRF e dados SNGPC",obs:"Obrigatório ANVISA"},
       {id:"f02",txt:"Cadastro de medicamentos: EAN, princípio ativo, tarja",obs:""},
-      {id:"f03",txt:"Configuração de grupos: MIP, similar, genérico, controlado",obs:""},
+      {id:"f03",txt:"Configuração de grupos de produtos",obs:"MIP, similar, genérico, controlado"},
       {id:"f04",txt:"Importação da tabela BRASINDICE / CMED",obs:""},
-      {id:"f05",txt:"Cadastro de convênios: Farmácia Popular, planos",obs:""}
+      {id:"f05",txt:"Cadastro de convênios",obs:"Farmácia Popular, planos de saúde"}
     ]},
     {fase:"Fase 2 — Controle SNGPC",itens:[
-      {id:"f06",txt:"Configuração do módulo SNGPC (integração ANVISA)",obs:"Portaria 344/98"},
-      {id:"f07",txt:"Teste de venda com receituário de controle especial",obs:"Tipo A, B1, B2, C1"},
-      {id:"f08",txt:"Configuração de impressão de receituário e etiqueta",obs:""},
+      {id:"f06",txt:"Configuração do módulo SNGPC",obs:"Portaria 344/98"},
+      {id:"f07",txt:"Teste de venda com receituário especial",obs:"Tipo A, B1, B2, C1"},
+      {id:"f08",txt:"Configuração de impressão de receituário",obs:""},
       {id:"f09",txt:"Teste de envio do arquivo SNGPC",obs:""}
     ]},
     {fase:"Fase 3 — PDV, fiscal e encerramento",itens:[
-      {id:"f10",txt:"Configuração do PDV e integração com SAT/NFC-e",obs:""},
-      {id:"f11",txt:"Configuração de NF-e de entrada de mercadorias",obs:""},
-      {id:"f12",txt:"Configuração de regras fiscais por grupo de produto",obs:""},
-      {id:"f13",txt:"Treinamento da equipe: caixa e dispensação",obs:""},
-      {id:"f14",txt:"Teste de fechamento de caixa e relatório do dia",obs:""},
+      {id:"f10",txt:"Configuração do PDV e SAT/NFC-e",obs:""},
+      {id:"f11",txt:"Configuração de NF-e de entrada",obs:""},
+      {id:"f12",txt:"Configuração de regras fiscais por grupo",obs:""},
+      {id:"f13",txt:"Treinamento da equipe de caixa",obs:""},
+      {id:"f14",txt:"Teste de fechamento de caixa",obs:""},
       {id:"f15",txt:"Assinatura do Termo de Conclusão",obs:""}
     ]}
   ]},
   hotel:{nome:"Sistema de Hotel",fases:[
-    {fase:"Fase 1 — Cadastros e parametrização",itens:[
-      {id:"h01",txt:"Cadastro de UHs, tipos de quarto e categorias",obs:"Standard, luxo, suíte, chalé etc."},
-      {id:"h02",txt:"Configuração de tarifas, temporadas e pacotes",obs:""},
-      {id:"h03",txt:"Configuração de serviços adicionais cobrados no quarto",obs:"Lavanderia, frigobar, room service"},
-      {id:"h04",txt:"Cadastro de usuários e perfis de acesso",obs:""}
+    {fase:"Fase 1 — Cadastros",itens:[
+      {id:"h01",txt:"Cadastro de UHs e tipos de quarto",obs:"Standard, luxo, suíte, chalé"},
+      {id:"h02",txt:"Configuração de tarifas e temporadas",obs:""},
+      {id:"h03",txt:"Configuração de serviços adicionais",obs:"Lavanderia, frigobar, room service"},
+      {id:"h04",txt:"Cadastro de usuários e perfis",obs:""}
     ]},
-    {fase:"Fase 2 — Operação e integrações",itens:[
+    {fase:"Fase 2 — Operação",itens:[
       {id:"h05",txt:"Treinamento: reservas, check-in e check-out",obs:""},
       {id:"h06",txt:"Treinamento: fatura e split de pagamentos",obs:""},
-      {id:"h07",txt:"Configuração de integração com OTAs",obs:"Booking, Airbnb — channel manager"},
-      {id:"h08",txt:"Configuração de relatórios: ocupação, diária média, RevPAR",obs:""},
-      {id:"h09",txt:"Configuração de NF-e de serviços com ISS municipal",obs:""}
+      {id:"h07",txt:"Integração com OTAs (se contratado)",obs:"Booking, Airbnb"},
+      {id:"h08",txt:"Configuração de relatórios gerenciais",obs:""},
+      {id:"h09",txt:"Configuração de NF-e de serviços (ISS)",obs:""}
     ]},
-    {fase:"Fase 3 — Validação e encerramento",itens:[
+    {fase:"Fase 3 — Validação",itens:[
       {id:"h10",txt:"Simulação: reserva → check-in → consumo → checkout",obs:""},
-      {id:"h11",txt:"Teste de cancelamento e política de reembolso",obs:""},
-      {id:"h12",txt:"Configuração de backup automático",obs:""},
-      {id:"h13",txt:"Treinamento da equipe de governança",obs:""},
+      {id:"h11",txt:"Teste de cancelamento e reembolso",obs:""},
+      {id:"h12",txt:"Configuração de backup",obs:""},
+      {id:"h13",txt:"Treinamento da governança",obs:""},
       {id:"h14",txt:"Assinatura do Termo de Conclusão",obs:""}
     ]}
   ]},
   restaurante:{nome:"Sistema de Restaurante",fases:[
     {fase:"Fase 1 — Cardápio e configurações",itens:[
-      {id:"r01",txt:"Cadastro de produtos, grupos e categorias",obs:"Entradas, pratos, bebidas, sobremesas, combos"},
-      {id:"r02",txt:"Configuração de complementos e adicionais por item",obs:""},
-      {id:"r03",txt:"Configuração de mesas, comandas e setores",obs:"Salão, delivery, balcão, drive-thru"},
-      {id:"r04",txt:"Configuração de formas de pagamento e taxa de serviço",obs:""},
+      {id:"r01",txt:"Cadastro de produtos e categorias do cardápio",obs:""},
+      {id:"r02",txt:"Configuração de complementos e adicionais",obs:""},
+      {id:"r03",txt:"Configuração de mesas, comandas e setores",obs:""},
+      {id:"r04",txt:"Configuração de formas de pagamento",obs:""},
       {id:"r05",txt:"Integração com impressoras de cozinha / KDS",obs:""}
     ]},
     {fase:"Fase 2 — Delivery e fiscal",itens:[
-      {id:"r06",txt:"Configuração do módulo delivery (raio e taxas)",obs:""},
-      {id:"r07",txt:"Integração com iFood / WhatsApp Business",obs:"Se contratado"},
-      {id:"r08",txt:"Configuração de NFC-e para consumo no salão",obs:""},
-      {id:"r09",txt:"Configuração de CF-e / SAT Fiscal",obs:"Se exigido pelo estado"},
-      {id:"r10",txt:"Teste completo de emissão fiscal e cancelamento",obs:""}
+      {id:"r06",txt:"Configuração do módulo delivery",obs:""},
+      {id:"r07",txt:"Integração com iFood / WhatsApp",obs:"Se contratado"},
+      {id:"r08",txt:"Configuração de NFC-e / SAT",obs:""},
+      {id:"r09",txt:"Teste de emissão fiscal",obs:""}
     ]},
     {fase:"Fase 3 — Treinamento e go-live",itens:[
-      {id:"r11",txt:"Treinamento: garçom — pedido e comanda",obs:""},
-      {id:"r12",txt:"Treinamento: caixa — abertura, operação, fechamento",obs:""},
-      {id:"r13",txt:"Treinamento: gerente — relatórios e fechamento diário",obs:""},
-      {id:"r14",txt:"Teste fluxo: pedido → cozinha → entrega → pagamento",obs:""},
-      {id:"r15",txt:"Assinatura do Termo de Conclusão",obs:""}
+      {id:"r10",txt:"Treinamento: garçom e comanda",obs:""},
+      {id:"r11",txt:"Treinamento: caixa e fechamento de turno",obs:""},
+      {id:"r12",txt:"Treinamento: gerente e relatórios",obs:""},
+      {id:"r13",txt:"Teste fluxo: pedido → cozinha → pagamento",obs:""},
+      {id:"r14",txt:"Assinatura do Termo de Conclusão",obs:""}
     ]}
   ]}
 };
 
-let DB_URL = localStorage.getItem('ns_fb_url') || '';
-let implantacoes=[],pendencias=[],checks={},pendFiltro='todas';
+// ================================================================
+// STATE
+// ================================================================
+let DB_URL=localStorage.getItem('ns_fb_url')||'';
+let implantacoes=[],pendencias=[],checks={},usuarios=[],pendFiltro='todas';
+let currentUser=null;
 
+// ================================================================
+// FIREBASE
+// ================================================================
 function setSync(ok){
   const d=document.getElementById('sync-dot'),l=document.getElementById('sync-label');
   if(d)d.className='sync-dot'+(ok?'':' off');
   if(l)l.textContent=ok?'Sincronizado':'Sem conexão';
 }
-
-async function fbGet(p){const r=await fetch(`${DB_URL}/${p}.json`);if(!r.ok)throw new Error();return r.json()}
-async function fbSet(p,d){const r=await fetch(`${DB_URL}/${p}.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});if(!r.ok)throw new Error()}
+async function fbGet(p){const r=await fetch(`${DB_URL}/${p}.json`);if(!r.ok)throw 0;return r.json()}
+async function fbSet(p,d){const r=await fetch(`${DB_URL}/${p}.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});if(!r.ok)throw 0}
 async function fbDel(p){await fetch(`${DB_URL}/${p}.json`,{method:'DELETE'})}
 function fkey(s){return s.replace(/[.#$\[\]\/]/g,'_')}
 
@@ -441,138 +568,249 @@ async function loadAll(){
     implantacoes=d&&d.implantacoes?Object.values(d.implantacoes):[];
     pendencias=d&&d.pendencias?Object.values(d.pendencias):[];
     checks=d&&d.checks?d.checks:{};
+    usuarios=d&&d.usuarios?Object.values(d.usuarios):[];
+    if(!usuarios.length) await criarAdminPadrao();
     setSync(true);
   }catch(e){
     setSync(false);
     implantacoes=JSON.parse(localStorage.getItem('ns_impl')||'[]');
     pendencias=JSON.parse(localStorage.getItem('ns_pend')||'[]');
     checks=JSON.parse(localStorage.getItem('ns_chk')||'{}');
+    usuarios=JSON.parse(localStorage.getItem('ns_users')||'[]');
+    if(!usuarios.length) criarAdminLocal();
   }
 }
 
-async function saveImpl(i){
-  try{await fbSet(`nuevo/implantacoes/${i.id}`,i);setSync(true)}catch(e){setSync(false)}
-  localStorage.setItem('ns_impl',JSON.stringify(implantacoes));
+async function criarAdminPadrao(){
+  const admin={id:'u_admin',nome:'Administrador',login:'admin',senha:'admin123',perfil:'admin',email:'',criado:new Date().toLocaleDateString('pt-BR')};
+  usuarios=[admin];
+  try{await fbSet('nuevo/usuarios/u_admin',admin);setSync(true)}catch(e){setSync(false)}
+  localStorage.setItem('ns_users',JSON.stringify(usuarios));
 }
-async function savePend(p){
-  try{await fbSet(`nuevo/pendencias/${p.id}`,p);setSync(true)}catch(e){setSync(false)}
-  localStorage.setItem('ns_pend',JSON.stringify(pendencias));
+function criarAdminLocal(){
+  const admin={id:'u_admin',nome:'Administrador',login:'admin',senha:'admin123',perfil:'admin',email:'',criado:new Date().toLocaleDateString('pt-BR')};
+  usuarios=[admin];
+  localStorage.setItem('ns_users',JSON.stringify(usuarios));
 }
-async function saveCheck(key,val){
-  try{await fbSet(`nuevo/checks/${fkey(key)}`,val);setSync(true)}catch(e){setSync(false)}
-  localStorage.setItem('ns_chk',JSON.stringify(checks));
-}
+
+async function saveImpl(i){try{await fbSet(`nuevo/implantacoes/${i.id}`,i);setSync(true)}catch(e){setSync(false)}localStorage.setItem('ns_impl',JSON.stringify(implantacoes))}
+async function savePend(p){try{await fbSet(`nuevo/pendencias/${p.id}`,p);setSync(true)}catch(e){setSync(false)}localStorage.setItem('ns_pend',JSON.stringify(pendencias))}
+async function saveCheck(key,val){try{await fbSet(`nuevo/checks/${fkey(key)}`,val);setSync(true)}catch(e){setSync(false)}localStorage.setItem('ns_chk',JSON.stringify(checks))}
+async function saveUser(u){try{await fbSet(`nuevo/usuarios/${u.id}`,u);setSync(true)}catch(e){setSync(false)}localStorage.setItem('ns_users',JSON.stringify(usuarios))}
 async function delImpl(id){try{await fbDel(`nuevo/implantacoes/${id}`);setSync(true)}catch(e){setSync(false)}}
 async function delPendFb(id){try{await fbDel(`nuevo/pendencias/${id}`);setSync(true)}catch(e){setSync(false)}}
+async function delUserFb(id){try{await fbDel(`nuevo/usuarios/${id}`);setSync(true)}catch(e){setSync(false)}}
 
+// ================================================================
+// SETUP / LOGIN
+// ================================================================
 function conectarFirebase(){
   const url=document.getElementById('firebase-url-input').value.trim().replace(/\/$/,'');
   const err=document.getElementById('setup-err');
   if(!url.startsWith('https://')||!url.includes('firebaseio.com')){err.style.display='block';return}
-  err.style.display='none';
-  DB_URL=url;
+  err.style.display='none';DB_URL=url;
   localStorage.setItem('ns_fb_url',DB_URL);
-  document.getElementById('setup-screen').style.display='none';
+  document.getElementById('setup-screen').classList.add('hidden');
   iniciar();
 }
 
+function fazerLogin(){
+  const login=document.getElementById('login-user').value.trim().toLowerCase();
+  const senha=document.getElementById('login-pass').value;
+  const u=usuarios.find(u=>u.login.toLowerCase()===login&&u.senha===senha);
+  if(!u){document.getElementById('login-err').style.display='block';return}
+  document.getElementById('login-err').style.display='none';
+  currentUser=u;
+  localStorage.setItem('ns_session',JSON.stringify({id:u.id,login:u.login}));
+  document.getElementById('login-screen').classList.add('hidden');
+  iniciarApp();
+}
+
+function fazerLogout(){
+  currentUser=null;
+  localStorage.removeItem('ns_session');
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('login-user').value='';
+  document.getElementById('login-pass').value='';
+}
+
 async function iniciar(){
-  document.getElementById('loading-screen').style.display='flex';
+  document.getElementById('loading-screen').classList.remove('hidden');
   document.getElementById('loading-msg').textContent='Carregando dados...';
   await loadAll();
-  document.getElementById('loading-screen').style.display='none';
+  document.getElementById('loading-screen').classList.add('hidden');
+
+  // Tentar restaurar sessão
+  const sess=localStorage.getItem('ns_session');
+  if(sess){
+    try{
+      const s=JSON.parse(sess);
+      const u=usuarios.find(x=>x.id===s.id);
+      if(u){currentUser=u;iniciarApp();return}
+    }catch(e){}
+  }
+  document.getElementById('login-screen').classList.remove('hidden');
+}
+
+function iniciarApp(){
+  const u=currentUser;
+  // Sidebar user
+  const av=document.getElementById('sidebar-avatar');
+  av.textContent=u.nome.charAt(0).toUpperCase();
+  av.className='user-avatar '+(u.perfil==='admin'?'admin':'tecnico');
+  document.getElementById('sidebar-name').textContent=u.nome;
+  document.getElementById('sidebar-role').textContent=u.perfil==='admin'?'Administrador':'Técnico';
+
+  // Admin-only items
+  document.querySelectorAll('.admin-only').forEach(el=>{
+    el.style.display=u.perfil==='admin'?'flex':'none';
+  });
+  // Esconder form de pendência para técnicos (mas eles podem ver)
+  // Técnicos não podem criar/excluir implantações nem gerenciar usuários
+
   document.getElementById('app').style.display='flex';
   updateBadge();renderDashboard();
+
   setInterval(async()=>{
-    const prev=JSON.stringify({implantacoes,pendencias,checks});
+    const prev=JSON.stringify({implantacoes,pendencias,checks,usuarios});
     await loadAll();
-    const curr=JSON.stringify({implantacoes,pendencias,checks});
+    const curr=JSON.stringify({implantacoes,pendencias,checks,usuarios});
     if(prev!==curr){
-      updateBadge();renderDashboard();
+      updateBadge();
+      if(document.getElementById('page-dashboard').classList.contains('active'))renderDashboard();
       if(document.getElementById('page-checklist').classList.contains('active'))renderChecklist();
       if(document.getElementById('page-pendencias').classList.contains('active'))renderPendencias();
+      if(document.getElementById('page-relatorios').classList.contains('active'))renderRelatorios();
+      if(document.getElementById('page-usuarios').classList.contains('active'))renderUsuarios();
     }
   },15000);
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
   if(!DB_URL){
-    document.getElementById('loading-screen').style.display='none';
-    document.getElementById('setup-screen').style.display='flex';
+    document.getElementById('loading-screen').classList.add('hidden');
+    document.getElementById('setup-screen').classList.remove('hidden');
   }else{iniciar()}
 });
 
-function notify(msg){const el=document.getElementById('notif');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
+// ================================================================
+// HELPERS
+// ================================================================
+function notify(msg){const el=document.getElementById('notif');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800)}
 function updateBadge(){const n=pendencias.filter(p=>p.status==='aberta').length,b=document.getElementById('badge-pend');if(b){b.textContent=n;b.style.display=n?'inline':'none'}}
-function ckey(iid,itid){return fkey(iid+'_'+itid)}
+function ckey(a,b){return fkey(a+'_'+b)}
 function implProgress(impl){
-  const cl=CHECKLISTS[impl.produto];let total=0,done=0;
-  cl.fases.forEach(f=>{total+=f.itens.length;done+=f.itens.filter(it=>checks[ckey(impl.id,it.id)]).length});
-  return{total,done,pct:total?Math.round(done/total*100):0}
+  const cl=CHECKLISTS[impl.produto];let t=0,d=0;
+  cl.fases.forEach(f=>{t+=f.itens.length;d+=f.itens.filter(it=>checks[ckey(impl.id,it.id)]).length});
+  return{total:t,done:d,pct:t?Math.round(d/t*100):0}
 }
-function populateSel(id){
+function populateSel(id,filter){
   const s=document.getElementById(id);if(!s)return;
-  s.innerHTML=implantacoes.length?implantacoes.map(i=>`<option value="${i.id}">${i.cliente} — ${CHECKLISTS[i.produto].nome}</option>`).join(''):'<option value="">Nenhuma implantação cadastrada</option>';
+  let list=implantacoes;
+  if(filter)list=list.filter(filter);
+  s.innerHTML=list.length?list.map(i=>`<option value="${i.id}">${i.cliente} — ${CHECKLISTS[i.produto].nome}</option>`).join(''):'<option value="">Nenhuma implantação</option>';
+}
+function populateTecSel(id){
+  const s=document.getElementById(id);if(!s)return;
+  const tecs=usuarios.filter(u=>u.perfil==='tecnico'||u.perfil==='admin');
+  s.innerHTML=tecs.length?tecs.map(u=>`<option value="${u.nome}">${u.nome}${u.perfil==='admin'?' (admin)':''}</option>`).join(''):'<option value="">Nenhum usuário</option>';
 }
 const PM={alta:['badge-red','Alta'],media:['badge-amber','Média'],baixa:['badge-gray','Baixa']};
 const SM={aberta:['badge-red','Aberta'],em_andamento:['badge-blue','Em andamento'],resolvida:['badge-green','Resolvida']};
 const IM={em_andamento:['badge-blue','Em andamento'],concluida:['badge-green','Concluída'],suspensa:['badge-gray','Suspensa']};
 
+// ================================================================
+// NAVIGATION
+// ================================================================
 function showPage(name){
+  // Verificar permissão
+  const adminOnly=['nova','usuarios'];
+  if(adminOnly.includes(name)&&currentUser&&currentUser.perfil!=='admin'){notify('Acesso restrito ao administrador.');return}
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
-  ['dashboard','checklist','pendencias','nova'].forEach((p,i)=>{if(p===name)document.querySelectorAll('.nav-item')[i].classList.add('active')});
+  const pages=['dashboard','checklist','pendencias','relatorios','nova','usuarios'];
+  document.querySelectorAll('.nav-item').forEach((b,i)=>{if(pages[i]===name)b.classList.add('active')});
   if(name==='dashboard')renderDashboard();
   if(name==='checklist'){populateSel('sel-implant');renderChecklist()}
   if(name==='pendencias'){populateSel('pend-impl');renderPendencias()}
+  if(name==='relatorios')renderRelatorios();
+  if(name==='nova'){populateSel('sel-implant');populateTecSel('n-consultor')}
+  if(name==='usuarios')renderUsuarios();
 }
 
+// ================================================================
+// DASHBOARD
+// ================================================================
 function renderDashboard(){
   const t=implantacoes.length,a=implantacoes.filter(i=>i.status==='em_andamento').length,
         c=implantacoes.filter(i=>i.status==='concluida').length,p=pendencias.filter(p=>p.status==='aberta').length;
+  const hoje=new Date().toISOString().slice(0,10);
+  const venc=pendencias.filter(p=>p.prazo&&p.prazo<hoje&&p.status!=='resolvida').length;
+
+  // Filtrar por técnico se não for admin
+  let lista=implantacoes;
+  if(currentUser&&currentUser.perfil!=='admin'){
+    lista=implantacoes.filter(i=>i.consultor===currentUser.nome);
+    document.getElementById('dash-sub').textContent=`Suas implantações — ${lista.length} no total`;
+  }else{
+    document.getElementById('dash-sub').textContent='Visão geral em tempo real de todas as implantações';
+  }
+
   document.getElementById('stats-grid').innerHTML=`
     <div class="stat-card"><div class="stat-num">${t}</div><div class="stat-label">Total de implantações</div></div>
     <div class="stat-card"><div class="stat-num blue">${a}</div><div class="stat-label">Em andamento</div></div>
     <div class="stat-card"><div class="stat-num green">${c}</div><div class="stat-label">Concluídas</div></div>
-    <div class="stat-card"><div class="stat-num red">${p}</div><div class="stat-label">Pendências abertas</div></div>`;
-  if(!implantacoes.length){
-    document.getElementById('dashboard-list').innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nenhuma implantação cadastrada.<br>Acesse "+ Nova Implantação" para começar.</div></div></div>`;return;
+    <div class="stat-card"><div class="stat-num red">${p}${venc?` <span style="font-size:14px;color:var(--amber)">/ ${venc} venc.</span>`:''}
+    </div><div class="stat-label">Pendências abertas</div></div>`;
+
+  if(!lista.length){
+    document.getElementById('dashboard-list').innerHTML=`<div class="card"><div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nenhuma implantação${currentUser&&currentUser.perfil!=='admin'?' atribuída a você':' cadastrada'}.</div></div></div>`;
+    return;
   }
   let html='';
-  implantacoes.forEach(impl=>{
+  lista.forEach(impl=>{
     const{total,done,pct}=implProgress(impl);
     const pi=pendencias.filter(p=>p.implantId===impl.id&&p.status!=='resolvida').length;
     const[sc,st]=IM[impl.status]||['badge-gray','—'];
+    const isAdmin=currentUser&&currentUser.perfil==='admin';
     html+=`<div class="impl-card"><div class="impl-header"><div>
       <div class="impl-name">${impl.cliente}</div>
-      <div class="impl-meta">${CHECKLISTS[impl.produto].nome}${impl.cidade?' · '+impl.cidade:''} · Consultor: <strong>${impl.consultor}</strong>${impl.data?' · Início: '+impl.data:''}</div>
+      <div class="impl-meta">${CHECKLISTS[impl.produto].nome}${impl.cidade?' · '+impl.cidade:''} · <strong>${impl.consultor}</strong>${impl.data?' · Início: '+impl.data:''}</div>
     </div><div class="impl-actions">
       <span class="badge ${sc}">${st}</span>
       ${pi?`<span class="badge badge-amber">${pi} pend.</span>`:''}
       <button class="btn btn-sm" onclick="abrirChecklist('${impl.id}')">Checklist</button>
-      <select class="btn btn-sm inline" onchange="mudarStatusImpl('${impl.id}',this.value)">
+      ${isAdmin?`<select class="btn btn-sm inline" onchange="mudarStatusImpl('${impl.id}',this.value)">
         <option value="em_andamento" ${impl.status==='em_andamento'?'selected':''}>Em andamento</option>
         <option value="concluida" ${impl.status==='concluida'?'selected':''}>Concluída</option>
         <option value="suspensa" ${impl.status==='suspensa'?'selected':''}>Suspensa</option>
       </select>
-      <button class="btn btn-sm btn-danger" onclick="excluirImpl('${impl.id}')">✕</button>
+      <button class="btn btn-sm btn-danger" onclick="excluirImpl('${impl.id}')">✕</button>`:''}
     </div></div>
     <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-    <div class="progress-text">${done} de ${total} itens concluídos · ${pct}%</div></div>`;
+    <div class="progress-text">${done} de ${total} itens · ${pct}%</div></div>`;
   });
   document.getElementById('dashboard-list').innerHTML=html;
 }
 
-async function mudarStatusImpl(id,status){const i=implantacoes.find(x=>x.id===id);if(i){i.status=status;await saveImpl(i);renderDashboard();notify('Status atualizado.')}}
+async function mudarStatusImpl(id,status){
+  const i=implantacoes.find(x=>x.id===id);
+  if(i){i.status=status;await saveImpl(i);renderDashboard();notify('Status atualizado.')}
+}
 async function excluirImpl(id){
   if(!confirm('Remover esta implantação e todos os seus dados?'))return;
-  implantacoes=implantacoes.filter(i=>i.id!==id);pendencias=pendencias.filter(p=>p.implantId!==id);
+  implantacoes=implantacoes.filter(i=>i.id!==id);
+  pendencias=pendencias.filter(p=>p.implantId!==id);
   await delImpl(id);localStorage.setItem('ns_impl',JSON.stringify(implantacoes));
   renderDashboard();notify('Implantação removida.');
 }
 function abrirChecklist(id){showPage('checklist');populateSel('sel-implant');document.getElementById('sel-implant').value=id;renderChecklist()}
 
+// ================================================================
+// CHECKLIST
+// ================================================================
 function renderChecklist(){
   const sel=document.getElementById('sel-implant'),id=sel?sel.value:'';
   const impl=implantacoes.find(i=>i.id===id);
@@ -592,32 +830,34 @@ function renderChecklist(){
         <div><div class="check-label ${d?'done':''}">${it.txt}</div>${it.obs?`<div class="check-obs">${it.obs}</div>`:''}</div>
       </div>`;
     });
-    html+=`<div class="progress-bar" style="margin-top:10px"><div class="progress-fill" style="width:${fp}%"></div></div></div>`;
+    html+=`<div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${fp}%"></div></div></div>`;
   });
   document.getElementById('checklist-body').innerHTML=html;
 }
-
 async function toggleCheck(implId,itemId){
   const key=ckey(implId,itemId);checks[key]=!checks[key];
   await saveCheck(key,checks[key]);renderChecklist();
   if(implProgress(implantacoes.find(i=>i.id===implId)).pct===100)notify('🎉 Implantação 100% concluída!');
 }
 
+// ================================================================
+// PENDÊNCIAS
+// ================================================================
 async function addPendencia(){
-  const implantId=document.getElementById('pend-impl').value,titulo=document.getElementById('pend-titulo').value.trim(),
-        resp=document.getElementById('pend-resp').value.trim(),desc=document.getElementById('pend-desc').value.trim(),
-        prio=document.getElementById('pend-prio').value,prazo=document.getElementById('pend-prazo').value;
-  if(!titulo){alert('Informe o título da pendência.');return}
-  if(!implantId){alert('Selecione uma implantação.');return}
+  const implantId=document.getElementById('pend-impl').value,
+        titulo=document.getElementById('pend-titulo').value.trim(),
+        resp=document.getElementById('pend-resp').value.trim(),
+        desc=document.getElementById('pend-desc').value.trim(),
+        prio=document.getElementById('pend-prio').value,
+        prazo=document.getElementById('pend-prazo').value;
+  if(!titulo){alert('Informe o título.');return}if(!implantId){alert('Selecione uma implantação.');return}
   const impl=implantacoes.find(i=>i.id===implantId);
-  const p={id:'pend_'+Date.now(),implantId,implantNome:impl?impl.cliente:'',titulo,resp,desc,prio,prazo,status:'aberta',criado:new Date().toLocaleDateString('pt-BR')};
+  const p={id:'pend_'+Date.now(),implantId,implantNome:impl?impl.cliente:'',titulo,resp,desc,prio,prazo,status:'aberta',criado:new Date().toLocaleDateString('pt-BR'),criadoPor:currentUser?currentUser.nome:''};
   pendencias.push(p);await savePend(p);
   ['pend-titulo','pend-resp','pend-desc','pend-prazo'].forEach(f=>document.getElementById(f).value='');
   updateBadge();renderPendencias();notify('Pendência registrada.');
 }
-
 function filterPend(f,btn){pendFiltro=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPendencias()}
-
 async function mudarStatusPend(id,status){
   const p=pendencias.find(x=>x.id===id);
   if(p){p.status=status;await savePend(p);updateBadge();renderPendencias();renderDashboard();notify('Pendência atualizada.')}
@@ -628,9 +868,13 @@ async function deletePend(id){
   localStorage.setItem('ns_pend',JSON.stringify(pendencias));
   updateBadge();renderPendencias();renderDashboard();notify('Pendência removida.');
 }
-
 function renderPendencias(){
   let lista=[...pendencias];
+  // Técnicos veem apenas pendências das suas implantações
+  if(currentUser&&currentUser.perfil!=='admin'){
+    const minhas=implantacoes.filter(i=>i.consultor===currentUser.nome).map(i=>i.id);
+    lista=lista.filter(p=>minhas.includes(p.implantId));
+  }
   if(pendFiltro==='alta')lista=lista.filter(p=>p.prio==='alta');
   else if(pendFiltro!=='todas')lista=lista.filter(p=>p.status===pendFiltro);
   lista.sort((a,b)=>({alta:0,media:1,baixa:2}[a.prio]-{alta:0,media:1,baixa:2}[b.prio]));
@@ -654,25 +898,244 @@ function renderPendencias(){
         <option value="em_andamento" ${p.status==='em_andamento'?'selected':''}>Em andamento</option>
         <option value="resolvida" ${p.status==='resolvida'?'selected':''}>Resolvida</option>
       </select>
-      <button class="btn btn-sm btn-danger" onclick="deletePend('${p.id}')">✕</button>
+      ${currentUser&&currentUser.perfil==='admin'?`<button class="btn btn-sm btn-danger" onclick="deletePend('${p.id}')">✕</button>`:''}
     </div></div></div>`;
   });
   document.getElementById('pend-list').innerHTML=html;
 }
 
+// ================================================================
+// RELATÓRIOS
+// ================================================================
+function renderRelatorios(){
+  const hoje=new Date().toISOString().slice(0,10);
+  const total=implantacoes.length;
+  const andando=implantacoes.filter(i=>i.status==='em_andamento');
+  const concluidas=implantacoes.filter(i=>i.status==='concluida');
+  const suspensas=implantacoes.filter(i=>i.status==='suspensa');
+  const pendAbertas=pendencias.filter(p=>p.status==='aberta');
+  const pendVencidas=pendencias.filter(p=>p.prazo&&p.prazo<hoje&&p.status!=='resolvida');
+  const pendAlta=pendencias.filter(p=>p.prio==='alta'&&p.status!=='resolvida');
+
+  // Implantações com pendências em aberto
+  const implComPend=implantacoes.filter(i=>pendencias.some(p=>p.implantId===i.id&&p.status!=='resolvida'));
+  // Implantações paradas (abaixo de 30% e em andamento)
+  const implParadas=andando.filter(i=>implProgress(i).pct<30);
+  // Implantações quase concluídas (>=80%)
+  const implQuaseConc=andando.filter(i=>implProgress(i).pct>=80);
+
+  // Por técnico
+  const tecs=usuarios.filter(u=>u.perfil==='tecnico'||u.perfil==='admin');
+  const porTec=tecs.map(u=>{
+    const minhas=implantacoes.filter(i=>i.consultor===u.nome);
+    const pendM=pendencias.filter(p=>minhas.map(i=>i.id).includes(p.implantId)&&p.status!=='resolvida').length;
+    const concl=minhas.filter(i=>i.status==='concluida').length;
+    return{nome:u.nome,total:minhas.length,concl,pend:pendM};
+  }).filter(t=>t.total>0);
+
+  // Por produto
+  const prods=Object.entries(CHECKLISTS).map(([k,v])=>{
+    const list=implantacoes.filter(i=>i.produto===k);
+    return{nome:v.nome.split('–')[0].trim(),total:list.length,concl:list.filter(i=>i.status==='concluida').length};
+  }).filter(p=>p.total>0).sort((a,b)=>b.total-a.total);
+
+  const maxTec=Math.max(...porTec.map(t=>t.total),1);
+  const maxProd=Math.max(...prods.map(p=>p.total),1);
+
+  let html=`
+  <!-- ALERTAS -->
+  ${pendVencidas.length||pendAlta.length||implParadas.length?`
+  <div class="report-section">
+    <div class="report-section-title">⚠ Alertas que precisam de atenção</div>
+    ${pendVencidas.length?`<div class="alert-item"><span class="alert-icon">🔴</span><div><strong>${pendVencidas.length} pendência(s) com prazo vencido.</strong><br>${pendVencidas.slice(0,3).map(p=>`${p.titulo} — ${p.implantNome}`).join('<br>')}</div></div>`:''}
+    ${pendAlta.length?`<div class="alert-item warn"><span class="alert-icon">🟡</span><div><strong>${pendAlta.length} pendência(s) de alta prioridade em aberto.</strong><br>${pendAlta.slice(0,3).map(p=>`${p.titulo} — ${p.implantNome}`).join('<br>')}</div></div>`:''}
+    ${implParadas.length?`<div class="alert-item warn"><span class="alert-icon">⏸</span><div><strong>${implParadas.length} implantação(ões) com menos de 30% de progresso.</strong><br>${implParadas.map(i=>`${i.cliente} — ${implProgress(i).pct}%`).join('<br>')}</div></div>`:''}
+  </div>`:''}
+
+  <!-- RESUMO GERAL -->
+  <div class="report-grid">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Resumo geral</div></div>
+      <div class="report-row"><span>Total de implantações</span><span class="report-val">${total}</span></div>
+      <div class="report-row"><span>Em andamento</span><span class="report-val" style="color:var(--blue)">${andando.length}</span></div>
+      <div class="report-row"><span>Concluídas</span><span class="report-val" style="color:var(--green)">${concluidas.length}</span></div>
+      <div class="report-row"><span>Suspensas</span><span class="report-val" style="color:var(--text3)">${suspensas.length}</span></div>
+      <div class="divider"></div>
+      <div class="report-row"><span>Taxa de conclusão</span><span class="report-val">${total?Math.round(concluidas.length/total*100):0}%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Pendências</div></div>
+      <div class="report-row"><span>Total registradas</span><span class="report-val">${pendencias.length}</span></div>
+      <div class="report-row"><span>Em aberto</span><span class="report-val" style="color:var(--red)">${pendAbertas.length}</span></div>
+      <div class="report-row"><span>Em andamento</span><span class="report-val" style="color:var(--blue)">${pendencias.filter(p=>p.status==='em_andamento').length}</span></div>
+      <div class="report-row"><span>Resolvidas</span><span class="report-val" style="color:var(--green)">${pendencias.filter(p=>p.status==='resolvida').length}</span></div>
+      <div class="divider"></div>
+      <div class="report-row"><span>Com prazo vencido</span><span class="report-val" style="color:var(--red)">${pendVencidas.length}</span></div>
+    </div>
+  </div>
+
+  <!-- IMPLANTAÇÕES COM PENDÊNCIAS -->
+  <div class="card">
+    <div class="card-header"><div class="card-title">Implantações com pendências em aberto (${implComPend.length})</div></div>
+    ${implComPend.length===0?'<div class="empty" style="padding:20px"><div class="empty-text">Nenhuma implantação com pendências em aberto. ✅</div></div>':''}
+    ${implComPend.map(impl=>{
+      const{pct}=implProgress(impl);
+      const pp=pendencias.filter(p=>p.implantId===impl.id&&p.status!=='resolvida');
+      const alta=pp.filter(p=>p.prio==='alta').length;
+      const venc=pp.filter(p=>p.prazo&&p.prazo<hoje).length;
+      return`<div class="report-row" style="flex-wrap:wrap;gap:6px">
+        <div style="flex:1;min-width:180px">
+          <div style="font-weight:600;font-size:13px">${impl.cliente}</div>
+          <div style="font-size:11px;color:var(--text2)">${CHECKLISTS[impl.produto].nome} · ${impl.consultor}</div>
+        </div>
+        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+          <span class="badge badge-amber">${pp.length} pend.</span>
+          ${alta?`<span class="badge badge-red">${alta} alta</span>`:''}
+          ${venc?`<span class="badge badge-red">⚠ ${venc} vencida</span>`:''}
+          <span class="badge badge-gray">${pct}% concluído</span>
+          <button class="btn btn-sm" onclick="abrirChecklist('${impl.id}')">Ver checklist</button>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <!-- PROGRESSO POR IMPLANTAÇÃO -->
+  <div class="card">
+    <div class="card-header"><div class="card-title">Progresso por implantação (em andamento)</div></div>
+    ${andando.length===0?'<div class="empty" style="padding:20px"><div class="empty-text">Nenhuma implantação em andamento.</div></div>':''}
+    ${andando.sort((a,b)=>implProgress(a).pct-implProgress(b).pct).map(impl=>{
+      const{done,total,pct}=implProgress(impl);
+      const col=pct>=80?'green':pct>=40?'':'red';
+      return`<div class="chart-bar-row">
+        <div class="chart-bar-label" title="${impl.cliente}">${impl.cliente}</div>
+        <div class="chart-bar-track"><div class="chart-bar-fill ${col}" style="width:${pct}%"></div></div>
+        <div class="chart-bar-num">${pct}%</div>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <!-- POR TÉCNICO / POR PRODUTO -->
+  <div class="report-grid">
+    ${porTec.length?`<div class="card">
+      <div class="card-header"><div class="card-title">Por técnico</div></div>
+      ${porTec.sort((a,b)=>b.total-a.total).map(t=>`
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:12px;font-weight:500">${t.nome}</span>
+            <span style="font-size:11px;color:var(--text2)">${t.total} impl. · ${t.concl} concl. · ${t.pend} pend.</span>
+          </div>
+          <div class="chart-bar-row" style="margin:0">
+            <div class="chart-bar-track" style="flex:1"><div class="chart-bar-fill" style="width:${Math.round(t.total/maxTec*100)}%"></div></div>
+          </div>
+        </div>`).join('')}
+    </div>`:'<div></div>'}
+    ${prods.length?`<div class="card">
+      <div class="card-header"><div class="card-title">Por produto</div></div>
+      ${prods.map(p=>`
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:12px;font-weight:500">${p.nome}</span>
+            <span style="font-size:11px;color:var(--text2)">${p.total} impl. · ${p.concl} concl.</span>
+          </div>
+          <div class="chart-bar-row" style="margin:0">
+            <div class="chart-bar-track" style="flex:1"><div class="chart-bar-fill green" style="width:${Math.round(p.total/maxProd*100)}%"></div></div>
+          </div>
+        </div>`).join('')}
+    </div>`:''}
+  </div>
+
+  <!-- QUASE CONCLUÍDAS -->
+  ${implQuaseConc.length?`<div class="card">
+    <div class="card-header"><div class="card-title">Próximas de concluir (≥ 80%)</div></div>
+    ${implQuaseConc.map(i=>{const{pct}=implProgress(i);return`
+      <div class="report-row">
+        <div><div style="font-weight:600;font-size:13px">${i.cliente}</div><div style="font-size:11px;color:var(--text2)">${i.consultor}</div></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="badge badge-green">${pct}%</span>
+          <button class="btn btn-sm" onclick="abrirChecklist('${i.id}')">Ver checklist</button>
+        </div>
+      </div>`}).join('')}
+  </div>`:''}`;
+
+  document.getElementById('relatorios-body').innerHTML=html;
+}
+
+// ================================================================
+// NOVA IMPLANTAÇÃO
+// ================================================================
 async function criarImpl(){
-  const cliente=document.getElementById('n-cliente').value.trim(),cidade=document.getElementById('n-cidade').value.trim(),
-        produto=document.getElementById('n-produto').value,consultor=document.getElementById('n-consultor').value.trim(),
-        data=document.getElementById('n-data').value,contato=document.getElementById('n-contato').value.trim(),
+  const cliente=document.getElementById('n-cliente').value.trim(),
+        cidade=document.getElementById('n-cidade').value.trim(),
+        produto=document.getElementById('n-produto').value,
+        consultor=document.getElementById('n-consultor').value,
+        data=document.getElementById('n-data').value,
+        contato=document.getElementById('n-contato').value.trim(),
         obs=document.getElementById('n-obs').value.trim();
   if(!cliente){alert('Informe o nome do cliente.');return}
-  if(!consultor){alert('Informe o consultor responsável.');return}
+  if(!consultor){alert('Selecione o técnico responsável.');return}
   const id='impl_'+Date.now();
-  const impl={id,cliente,cidade,produto,consultor,data,contato,obs,status:'em_andamento',criado:new Date().toLocaleDateString('pt-BR')};
+  const impl={id,cliente,cidade,produto,consultor,data,contato,obs,status:'em_andamento',criado:new Date().toLocaleDateString('pt-BR'),criadoPor:currentUser?currentUser.nome:''};
   implantacoes.push(impl);await saveImpl(impl);
-  ['n-cliente','n-cidade','n-consultor','n-data','n-contato','n-obs'].forEach(f=>document.getElementById(f).value='');
+  ['n-cliente','n-cidade','n-data','n-contato','n-obs'].forEach(f=>document.getElementById(f).value='');
   notify('✅ Implantação criada!');
   setTimeout(()=>{showPage('checklist');populateSel('sel-implant');document.getElementById('sel-implant').value=id;renderChecklist()},700);
+}
+
+// ================================================================
+// USUÁRIOS
+// ================================================================
+async function criarUsuario(){
+  const nome=document.getElementById('u-nome').value.trim(),
+        login=document.getElementById('u-login').value.trim().toLowerCase().replace(/\s/g,''),
+        senha=document.getElementById('u-senha').value,
+        perfil=document.getElementById('u-perfil').value,
+        email=document.getElementById('u-email').value.trim();
+  if(!nome){alert('Informe o nome.');return}
+  if(!login){alert('Informe o usuário de login.');return}
+  if(senha.length<4){alert('Senha deve ter ao menos 4 caracteres.');return}
+  if(usuarios.find(u=>u.login===login)){alert('Este usuário já existe.');return}
+  const u={id:'u_'+Date.now(),nome,login,senha,perfil,email,criado:new Date().toLocaleDateString('pt-BR')};
+  usuarios.push(u);await saveUser(u);
+  ['u-nome','u-login','u-senha','u-email'].forEach(f=>document.getElementById(f).value='');
+  renderUsuarios();notify('Usuário cadastrado.');
+}
+
+async function excluirUsuario(id){
+  if(id==='u_admin'){notify('O administrador padrão não pode ser removido.');return}
+  if(!confirm('Remover este usuário?'))return;
+  usuarios=usuarios.filter(u=>u.id!==id);await delUserFb(id);
+  localStorage.setItem('ns_users',JSON.stringify(usuarios));
+  renderUsuarios();notify('Usuário removido.');
+}
+
+async function alterarSenha(id){
+  const nova=prompt('Nova senha (mínimo 4 caracteres):');
+  if(!nova||nova.length<4){alert('Senha inválida.');return}
+  const u=usuarios.find(x=>x.id===id);
+  if(u){u.senha=nova;await saveUser(u);notify('Senha alterada.');}
+}
+
+function renderUsuarios(){
+  if(!document.getElementById('lista-usuarios'))return;
+  if(!usuarios.length){document.getElementById('lista-usuarios').innerHTML='<div class="card"><div class="empty"><div class="empty-text">Nenhum usuário cadastrado.</div></div></div>';return}
+  let html='';
+  usuarios.forEach(u=>{
+    const isAdmin=u.perfil==='admin';
+    const ini=u.nome.charAt(0).toUpperCase();
+    html+=`<div class="user-card">
+      <div class="user-card-avatar ${isAdmin?'admin':'tecnico'}" style="background:${isAdmin?'var(--purple-bg)':'var(--blue-bg)'};color:${isAdmin?'var(--purple-text)':'var(--blue-text)'}">${ini}</div>
+      <div class="user-card-info">
+        <div class="user-card-name">${u.nome} ${u.id===currentUser.id?'<span style="font-size:10px;color:var(--text3)">(você)</span>':''}</div>
+        <div class="user-card-meta">@${u.login} · ${isAdmin?'Administrador':'Técnico'}${u.email?' · '+u.email:''} · Cadastrado: ${u.criado}</div>
+      </div>
+      <div class="user-card-actions">
+        <span class="badge ${isAdmin?'badge-purple':'badge-blue'}">${isAdmin?'Admin':'Técnico'}</span>
+        <button class="btn btn-sm" onclick="alterarSenha('${u.id}')">🔑 Senha</button>
+        ${u.id!=='u_admin'&&u.id!==currentUser.id?`<button class="btn btn-sm btn-danger" onclick="excluirUsuario('${u.id}')">✕</button>`:''}
+      </div>
+    </div>`;
+  });
+  document.getElementById('lista-usuarios').innerHTML=html;
 }
 </script>
 </body>
